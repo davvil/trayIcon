@@ -49,8 +49,8 @@ class TrayIcon(threading.Thread):
 	def update_icon(self, fname):
             if fname != self.current_icon:
                 self.icon.set_from_file(fname)
-                self.icon.set_visible(True)
                 self.current_icon = fname
+            self.icon.set_visible(True)
 
         def update_tooltip(self, tooltip):
             self.icon.set_tooltip_text(tooltip)

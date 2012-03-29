@@ -36,7 +36,7 @@ class TrayIcon(threading.Thread):
                     break
                 else:
                     fields = l.strip().split()
-                    if len(fields) < 2:
+                    if not fields:
                         continue
                     if fields[0] == "icon":
                         gobject.idle_add(self.update_icon, fields[1])

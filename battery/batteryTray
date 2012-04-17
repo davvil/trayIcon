@@ -1,7 +1,5 @@
 #!/bin/bash
 
-DIR=`dirname $0`
-
 while true; do
     acpiOutput=(`acpi`)
     status=${acpiOutput[2]}
@@ -10,9 +8,9 @@ while true; do
     level=${level%\%*}
     timeRemaining=${acpiOutput[4]}
     if [[ $status == Charging || $status == Full || $status == Unknown ]]; then
-        icon=$DIR/icons/charge-${level}.png
+        icon=%INSTALLDIR%/share/trayIcon/battery/icons/charge-${level}.png
     else
-        icon=$DIR/icons/discharge-${level}.png
+        icon=%INSTALLDIR%/share/trayIcon/battery/icons/discharge-${level}.png
     fi
     echo icon $icon
     tooltip="$status, ${level}%"
@@ -21,4 +19,4 @@ while true; do
     fi
     echo tooltip $tooltip
     sleep 10
-done | $DIR/../trayIcon
+done | %INSTALLDIR%/bin/trayIcon

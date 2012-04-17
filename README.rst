@@ -10,3 +10,5 @@ Supported commands:
 - icon <file>: sets the icon from file
 - tooltip <text>: sets the tooltip text
 - hide: hides the icon altogether
+
+Some example applications (under development most of them) are included.

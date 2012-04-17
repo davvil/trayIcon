@@ -53,7 +53,7 @@ def checkMail(username, password, mailbox, mailserver, port, timeout, icon):
 
 optionParser = optparse.OptionParser()
 optionParser.add_option("-i", "--icon", metavar="ICON", dest="icon",
-                        help="Icon file to show", default="%INSTALLDIR%/share/trayIcon/mail/icons/mail-icon.png")
+                        help="Icon file to show", default="%PREFIXDIR%/share/trayIcon/mail/icons/mail-icon.png")
 optionParser.add_option("-t", "--timeout", metavar="SLEEP", dest="timeout",
                         help="Timeout between mail checks", type=int, default=60)
 (options, _) = optionParser.parse_args()

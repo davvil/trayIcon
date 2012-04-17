@@ -8,9 +8,9 @@ while true; do
     level=${level%\%*}
     timeRemaining=${acpiOutput[4]}
     if [[ $status == Charging || $status == Full || $status == Unknown ]]; then
-        icon=%INSTALLDIR%/share/trayIcon/battery/icons/charge-${level}.png
+        icon=%PREFIXDIR%/share/trayIcon/battery/icons/charge-${level}.png
     else
-        icon=%INSTALLDIR%/share/trayIcon/battery/icons/discharge-${level}.png
+        icon=%PREFIXDIR%/share/trayIcon/battery/icons/discharge-${level}.png
     fi
     echo icon $icon
     tooltip="$status, ${level}%"
@@ -19,4 +19,4 @@ while true; do
     fi
     echo tooltip $tooltip
     sleep 10
-done | %INSTALLDIR%/bin/trayIcon
+done | %PREFIXDIR%/bin/trayIcon

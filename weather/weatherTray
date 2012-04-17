@@ -8,10 +8,10 @@ mkfifo $tempDir/temperature
 
 # We work with fds in order not to close the pipes
 exec 4<>$tempDir/condition
-%INSTALLDIR%/bin/trayIcon < $tempDir/condition &
+%PREFIXDIR%/bin/trayIcon < $tempDir/condition &
 pidCond=$!
 exec 5<>$tempDir/temperature
-%INSTALLDIR%/bin/trayIcon < $tempDir/temperature &
+%PREFIXDIR%/bin/trayIcon < $tempDir/temperature &
 pidTemp=$!
 
 function rmTempDir() {
@@ -25,17 +25,17 @@ function rmTempDir() {
 trap "rmTempDir" 2
 
 while true; do
-    IFS="	" read temperature condition icon < <(python2 %INSTALLDIR%/lib/trayIcon/weather/weathercli.py 10245) 
+    IFS="	" read temperature condition icon < <(python2 %PREFIXDIR%/lib/trayIcon/weather/weathercli.py 10245) 
     condition=$(echo $condition | tr -d '"')
     normCondition=$(echo $condition | tr ' ' '_')
     condition=$(echo $condition | sed -r 's/(.)/\u\1/')
 
     # Condition icon
-    condIcon=%INSTALLDIR%/share/trayIcon/weather/icons/${normCondition}.png
+    condIcon=%PREFIXDIR%/share/trayIcon/weather/icons/${normCondition}.png
     if [ -f $condIcon ]; then
         echo icon $condIcon
     else
-        echo icon %INSTALLDIR%/share/trayIcon/weather/icons/unknown.png
+        echo icon %PREFIXDIR%/share/trayIcon/weather/icons/unknown.png
         echo $condIcon >> $HOME/weather-missingIcons
     fi 1>&4
     echo tooltip $condition, $temperature° 1>&4

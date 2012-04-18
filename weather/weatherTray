@@ -24,6 +24,12 @@ function rmTempDir() {
 
 trap "rmTempDir" 2
 
+# The temperature icon will always be the same. We set it here and the we do reloads.
+echo icon %PREFIXDIR%/share/trayIcon/weather/icons/unknown.png 1>&4
+sleep 1 # This is done so the condition icon comes before the temperature icon
+tempIcon=$tempDir/temperature.png
+echo icon $tempIcon 1>&5
+
 while true; do
     IFS="	" read temperature condition icon < <(python2 %PREFIXDIR%/lib/trayIcon/weather/weathercli.py 10245) 
     condition=$(echo $condition | tr -d '"')
@@ -41,11 +47,10 @@ while true; do
     echo tooltip $condition, $temperature° 1>&4
 
     # Temperature icon
-    tempIcon=$tempDir/temperature.png
     convert -size 16x16 -background none \
         -font /usr/share/texmf-dist/fonts/truetype/public/dejavu/DejaVuSerif.ttf \
         -fill white -pointsize 10 -gravity center label:"$temperature°" $tempIcon
-    echo icon $tempIcon 1>&5
+    echo reload 1>&5
     echo tooltip $condition, $temperature° 1>&5
 
     sleep $((30*60))

@@ -40,6 +40,8 @@ class TrayIcon(threading.Thread):
                         continue
                     if fields[0] == "icon":
                         gobject.idle_add(self.update_icon, fields[1])
+                    elif fields[0] == "reload":
+                        gobject.idle_add(self.reload_icon)
                     elif fields[0] == "tooltip":
                         gobject.idle_add(self.update_tooltip, " ".join(fields[1:]))
                     elif fields[0] == "hide":
@@ -57,6 +59,10 @@ class TrayIcon(threading.Thread):
 
         def hide(self):
             self.icon.set_visible(False)
+
+        def reload_icon(self):
+            self.icon.set_from_file(self.current_icon)
+            self.icon.set_visible(True)
 	
 if __name__ == "__main__":
     gobject.threads_init()

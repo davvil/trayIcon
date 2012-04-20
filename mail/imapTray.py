@@ -39,7 +39,7 @@ def checkMail(username, password, mailbox, mailserver, port, timeout, icon):
             if unseenMails > 0:
                 sys.stdout.write("icon %s\n" % icon)
             else:
-                sys.stdout.write("hide")
+                sys.stdout.write("hide\n")
 
             # close the mailbox
             server.close()
@@ -47,7 +47,7 @@ def checkMail(username, password, mailbox, mailserver, port, timeout, icon):
             # logout of the server
             server.logout()
         except:
-            sys.stdout.write("hide")
+            sys.stdout.write("hide\n")
         sys.stdout.flush()
         time.sleep(timeout)
 

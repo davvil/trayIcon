@@ -11,15 +11,17 @@ from clint.textui import puts, colored
 class WeatherDataError(Exception):
     pass
 
-
 class Weather(object):
     def now(self, query):
-        raw_xml = urllib.urlopen('http://www.google.com/ig/api?weather={0}'.format(urllib.quote_plus(query))).read()
-        
         try:
+            raw_xml = urllib.urlopen('http://www.google.com/ig/api?weather={0}'.format(urllib.quote_plus(query))).read()
             dom = xml.dom.minidom.parseString(raw_xml)
         except ExpatError:
             raise WeatherDataError("Malformed response from weather service")
+        except IOError:
+            print >> sys.stderr, "Connection error"
+            sys.exit(1)
+
 
         current_conditions = self.get_element_from_dom(dom, 'current_conditions')
         temperature = self.get_element_from_dom(current_conditions, 'temp_c')

@@ -32,26 +32,36 @@ echo icon $tempIcon 1>&5
 
 while true; do
     IFS="	" read temperature condition icon < <(python2 %PREFIXDIR%/lib/trayIcon/weather/weathercli.py 10245) 
-    condition=$(echo $condition | tr -d '"')
-    normCondition=$(echo $condition | tr ' ' '_')
-    condition=$(echo $condition | sed -r 's/(.)/\u\1/')
+    if [ "$temperature" != "" ]; then
+        condition=$(echo $condition | tr -d '"')
+        normCondition=$(echo $condition | tr ' ' '_')
+        condition=$(echo $condition | sed -r 's/(.)/\u\1/')
 
-    # Condition icon
-    condIcon=%PREFIXDIR%/share/trayIcon/weather/icons/${normCondition}.png
-    if [ -f $condIcon ]; then
-        echo icon $condIcon
+        # Condition icon
+        condIcon=%PREFIXDIR%/share/trayIcon/weather/icons/${normCondition}.png
+        if [ -f $condIcon ]; then
+            echo icon $condIcon
+        else
+            echo icon %PREFIXDIR%/share/trayIcon/weather/icons/unknown.png
+            echo $condIcon >> $HOME/weather-missingIcons
+        fi 1>&4
+        echo tooltip $condition, $temperature° 1>&4
+
+        # Temperature icon
+        convert -size 16x16 -background none \
+            -font /usr/share/texmf-dist/fonts/truetype/public/dejavu/DejaVuSerif.ttf \
+            -fill white -pointsize 10 -gravity center label:"$temperature°" $tempIcon
+        echo reload 1>&5
+        echo tooltip $condition, $temperature° 1>&5
     else
-        echo icon %PREFIXDIR%/share/trayIcon/weather/icons/unknown.png
-        echo $condIcon >> $HOME/weather-missingIcons
-    fi 1>&4
-    echo tooltip $condition, $temperature° 1>&4
-
-    # Temperature icon
-    convert -size 16x16 -background none \
-        -font /usr/share/texmf-dist/fonts/truetype/public/dejavu/DejaVuSerif.ttf \
-        -fill white -pointsize 10 -gravity center label:"$temperature°" $tempIcon
-    echo reload 1>&5
-    echo tooltip $condition, $temperature° 1>&5
+        echo icon %PREFIXDIR%/share/trayIcon/weather/icons/unknown.png 1>&4
+        echo tooltip Could not connect 1>&4
+        convert -size 16x16 -background none \
+            -font /usr/share/texmf-dist/fonts/truetype/public/dejavu/DejaVuSerif.ttf \
+            -fill white -pointsize 10 -gravity center label:"na" $tempIcon
+        echo reload 1>&5
+        echo tooltip Could not connect 1>&5
+    fi
 
     sleep $((30*60))
 done

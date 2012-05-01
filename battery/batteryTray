@@ -2,21 +2,23 @@
 
 while true; do
     acpiOutput=(`acpi`)
-    status=${acpiOutput[2]}
-    status=${status:0:-1}
-    level=${acpiOutput[3]}
-    level=${level%\%*}
-    timeRemaining=${acpiOutput[4]}
-    if [[ $status == Charging || $status == Full || $status == Unknown ]]; then
-        icon=%PREFIXDIR%/share/trayIcon/battery/icons/charge-${level}.png
-    else
-        icon=%PREFIXDIR%/share/trayIcon/battery/icons/discharge-${level}.png
+    if [ ${#acpiOutput[*]} > 0 ]; then 
+        status=${acpiOutput[2]}
+        status=${status:0:-1}
+        level=${acpiOutput[3]}
+        level=${level%\%*}
+        timeRemaining=${acpiOutput[4]}
+        if [[ $status == Charging || $status == Full || $status == Unknown ]]; then
+            icon=%PREFIXDIR%/share/trayIcon/battery/icons/charge-${level}.png
+        else
+            icon=%PREFIXDIR%/share/trayIcon/battery/icons/discharge-${level}.png
+        fi
+        echo icon $icon
+        tooltip="$status, ${level}%"
+        if [ "$timeRemaining" != "" ]; then
+            tooltip="$tooltip, $timeRemaining"
+        fi
+        echo tooltip $tooltip
     fi
-    echo icon $icon
-    tooltip="$status, ${level}%"
-    if [ "$timeRemaining" != "" ]; then
-        tooltip="$tooltip, $timeRemaining"
-    fi
-    echo tooltip $tooltip
     sleep 10
 done | %PREFIXDIR%/bin/trayIcon

@@ -2,7 +2,7 @@
 
 while true; do
     acpiOutput=(`acpi`)
-    if [ ${#acpiOutput[*]} > 0 ]; then 
+    if [ ${#acpiOutput[*]} -gt 0 ]; then 
         status=${acpiOutput[2]}
         status=${status:0:-1}
         level=${acpiOutput[3]}
@@ -20,5 +20,5 @@ while true; do
         fi
         echo tooltip $tooltip
     fi
-    sleep 10
+    sleep 30
 done | %PREFIXDIR%/bin/trayIcon
